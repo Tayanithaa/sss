@@ -1,0 +1,31 @@
+name: OWASP ZAP Security Scan
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  dast_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Start Web Application
+        run: |
+          python3 -m http.server 8000 &
+          sleep 3
+
+      - name: OWASP ZAP Scan
+        uses: zaproxy/action-baseline@v0.13.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: "http://localhost:8000"
+          fail_action: false
