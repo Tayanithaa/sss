@@ -2,13 +2,12 @@ name: OWASP ZAP Security Scan
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   pull_request:
-    branches: ["main"]
+    branches: [main]
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
   dast_scan:
@@ -18,14 +17,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Start Web Application
+      - name: Start Website
         run: |
           python3 -m http.server 8000 &
-          sleep 3
+          sleep 5
 
-      - name: OWASP ZAP Scan
-        uses: zaproxy/action-baseline@v0.13.0
+      - name: Run OWASP ZAP Scan
+        uses: zaproxy/action-baseline@v0.15.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          target: "http://localhost:8000"
+          target: http://localhost:8000
+          artifact_name: zap-scan-report
           fail_action: false
