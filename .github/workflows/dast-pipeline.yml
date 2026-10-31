@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   dast_scan:
@@ -25,6 +26,7 @@ jobs:
       - name: Run OWASP ZAP Scan
         uses: zaproxy/action-baseline@v0.15.0
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           target: http://localhost:8000
           artifact_name: zap-scan-report
           fail_action: false
